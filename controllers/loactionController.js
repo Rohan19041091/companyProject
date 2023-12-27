@@ -5,7 +5,11 @@ const createLocation=async(req,res)=>{
    const newLocation= await new Location({name})
    try {
      await newLocation.save()
-     res.json({message:"location is saved "})
+     res.json({
+        success: true,
+        message: "Location created",
+        data: newLocation // Include the data in the response
+    });
    } catch (error) {
     res.status(500).json({message:"location not created"})
    }

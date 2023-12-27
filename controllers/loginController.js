@@ -11,7 +11,7 @@ const userLogin=async(req,res)=>{
        return res.status(400).json({message:"user not found"})
     }
     
-    const userPasswordMatch =  bcrypt.compare(password,User.password)
+    const userPasswordMatch =  bcrypt.compare(password,user.password)
     if(userPasswordMatch){
        const UserToken = jwt.sign({email:user.email,role: 'user'},secretKey, { expiresIn: '1h' })
        res.json({UserToken})
@@ -48,7 +48,7 @@ const deviceLogin=async(req,res)=>{
     }
     const companyPasswordMatch = await bcrypt.compare(password,user.password)
     if(companyPasswordMatch){
-       const companyToken = jwt.sign({email:user.email,role: 'company'},secretKey, { expiresIn: '1h' })
+       const companyToken = jwt.sign({email:user.email,role: 'company',companyId: Company.companyId},secretKey, { expiresIn: '1h' })
        res.json({companyToken})
        console.log('Password from request:', password);
   console.log('Hashed password from user object:', user.password);

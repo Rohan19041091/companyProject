@@ -8,7 +8,11 @@ const createDevices=async(req,res)=>{
     const newDevices= await new Devices({name,email,password:hashedPassword,locationId,roomId})
     try {
        await  newDevices.save();
-       res.json({message:"Devices created"})
+       res.json({
+        success: true,
+        message: "Devices created",
+        data: newDevices 
+    });
      } catch (error) {
          res.status(500).json({message:"Devicces is not created"})
      }

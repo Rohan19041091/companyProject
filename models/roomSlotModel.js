@@ -5,9 +5,6 @@ const roomSlotSchema= new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Room" 
     },
-    date:{
-        type:Date
-    },
     startTime: {
         type: mongoose.Decimal128,
         required: true,

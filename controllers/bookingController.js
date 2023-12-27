@@ -5,7 +5,11 @@ const createBooking=async(req,res)=>{
     const newBooking= await new Booking({slotId,companyId,userId})
     try {
        await  newBooking.save();
-       res.json({message:"Booking created"})
+       res.json({
+        success: true,
+        message: "Booking created",
+        data: newBooking // Include the data in the response
+    });
      } catch (error) {
          res.status(500).json({message:"Booking is not created"})
      }

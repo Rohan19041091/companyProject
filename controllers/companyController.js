@@ -7,7 +7,7 @@ const createCompany=async(req,res)=>{
     const newCompany=await new Company({name,companyName,email,password:hashedPassword,location})
     try {
         await  newCompany.save();
-        res.json({message:"user created"})
+        res.json({success: true,message: "Company created", data: newCompany });
       } catch (error) {
           res.status(500).json({message:"company not created"})
       }

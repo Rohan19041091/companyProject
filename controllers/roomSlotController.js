@@ -6,7 +6,11 @@ const createRoomSlot=async(req,res)=>{
     const newRoomSlot= await new RoomSlot({roomId,startTime,endTime})
     try {
        await  newRoomSlot.save();
-       res.json({message:"RoomSlot created"})
+       res.json({
+        success: true,
+        message: "Room Slot created",
+        data: newRoomSlot // Include the data in the response
+    });
      } catch (error) {
          res.status(500).json({message:"RoomSlot is not created"})
      }

@@ -8,13 +8,13 @@ import { createCompany, listCompany } from '../controllers/companyController.js'
 import { createBooking } from '../controllers/bookingController.js';
 import { createAmenity, listAmenity } from '../controllers/amenitesController.js';
 import {companyLogin, deviceLogin, userLogin} from '../controllers/loginController.js';
-import authUserMiddleWare from '../controllers/authenticationUserController.js';
-import authDevicesMiddleWare from '../controllers/authenticationDevices.js';
-import authCompanyMiddleWare from '../controllers/authenticationCompany.js';
+import authUserMiddleWare from '../middleware/authenticationUserController.js';
+import authDevicesMiddleWare from '../middleware/authenticationDevices.js';
+import authCompanyMiddleWare from '../middleware/authenticationCompany.js';
 const router = express.Router();
 
 
-router.post("/createUser",createUser)
+router.post("/createUser",authCompanyMiddleWare,createUser)
 router.post('/getUserById',authUserMiddleWare,getUserById)
 router.post('/UpdateUserById',authUserMiddleWare,updateUserById)
 

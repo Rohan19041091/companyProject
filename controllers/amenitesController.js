@@ -5,7 +5,11 @@ const createAmenity=async(req,res)=>{
     const newAmenity= new Amenity({name})
     try {
        await  newAmenity.save();
-       res.json({message:"Amenity created"})
+       res.json({
+        success: true,
+        message: "Amenity created",
+        data: newAmenity // Include the data in the response
+    });
      } catch (error) {
          res.status(500).json({message:"Amenity is not created"})
      }
