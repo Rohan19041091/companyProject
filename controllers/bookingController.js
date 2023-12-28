@@ -59,6 +59,15 @@ const getBookingsByCompanyId = async (req, res) => {
                     as: 'user'
                 }
             },
+            {
+                $project: {
+                   
+                    'bookingField': 1,  
+                    'room.name': 1,    
+                    'company.name': 1,  
+                    'user.username': 1 
+                }
+            }
             
         ]);
 
