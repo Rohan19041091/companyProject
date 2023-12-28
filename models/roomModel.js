@@ -3,9 +3,10 @@ import mongoose from "mongoose";
 const roomSchema=new mongoose.Schema({
     name:String,
     description:String,
-    amenites:{
-        type: mongoose.Schema.Types.Mixed,
-    },
+    amenities: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Amenity"  // Replace "Amenity" with the actual model name referencing the amenities
+      }],
     slot:String,
     companyId: {
         type: mongoose.Schema.Types.ObjectId,

@@ -13,12 +13,12 @@ const authUserMiddleWare=(req,res,next)=>{
         return res.status(401).json({ message: 'Unauthorized - Missing token' });
     }
     try {
-        req.user = decoded;
+        const decoded = jwt.verify(token.replace('Bearer ', ''), secretKey);
         if (decoded.role !== 'user') {
             return res.status(403).json({ message: 'Forbidden - User access required' });
         }
-        const decoded = jwt.verify(token.replace('Bearer ', ''), secretKey);
-        
+       
+        req.user = decoded;
         next();
     } catch (error) {
         console.error('Token verification failed:', error.message);

@@ -13,7 +13,7 @@ const userLogin=async(req,res)=>{
     
     const userPasswordMatch =  bcrypt.compare(password,user.password)
     if(userPasswordMatch){
-       const UserToken = jwt.sign({email:user.email,role: 'user'},secretKey, { expiresIn: '1h' })
+       const UserToken = jwt.sign({email:user.email,role: 'user',userId:user._id,companyId: user.companyId},secretKey, { expiresIn: '1h' })
        res.json({UserToken})
     }
     else{
@@ -25,11 +25,11 @@ const userLogin=async(req,res)=>{
 
 const deviceLogin=async(req,res)=>{
     const{email,password}=req.body;
-    const user = await Devices.findOne({email});
-    if(!user){
+    const device = await Devices.findOne({email});
+    if(!device){
        return res.status(400).json({message:"user not found"})
     }
-    const devicePasswordMatch = bcrypt.compare(password,user.password)
+    const devicePasswordMatch = bcrypt.compare(password,device.password)
     if(devicePasswordMatch){
        const jwtToken = jwt.sign({email:Devices.email,role: 'device'},secretKey, { expiresIn: '1h' })
        res.json({jwtToken})
@@ -42,16 +42,15 @@ const deviceLogin=async(req,res)=>{
 
   const companyLogin=async(req,res)=>{
     const{email,password}=req.body;
-    const user = await Company.findOne({email});
-    if(!user){
+    const company = await Company.findOne({email});
+    if(!company){
        return res.status(400).json({message:"user not found"})
     }
-    const companyPasswordMatch = await bcrypt.compare(password,user.password)
+    const companyPasswordMatch = await bcrypt.compare(password,company.password)
     if(companyPasswordMatch){
-       const companyToken = jwt.sign({email:user.email,role: 'company',companyId: Company.companyId},secretKey, { expiresIn: '1h' })
+       const companyToken = jwt.sign({email:company.email,role: 'company',companyId: company._id},secretKey, { expiresIn: '1h' })
        res.json({companyToken})
-       console.log('Password from request:', password);
-  console.log('Hashed password from user object:', user.password);
+      
 
     }
     else{

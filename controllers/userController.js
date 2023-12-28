@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt'
 const createUser=async(req,res)=>{
      const {name,email,password}=req.body
      const companyId = req.user.companyId;
+     console.log(req.user)
      const hashedPassword = await bcrypt.hash(password,10)
      const newUser= await new User({name,email,password:hashedPassword,companyId})
      try {
@@ -10,7 +11,7 @@ const createUser=async(req,res)=>{
         res.json({
             success: true,
             message: "User created",
-            data: newUser // Include the data in the response
+            data: newUser 
         });
       } catch (error) {
           res.status(500).json({message:"user not created"})

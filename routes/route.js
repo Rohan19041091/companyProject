@@ -1,11 +1,11 @@
 import express from 'express';
 import { createUser, getUserById, updateUserById } from '../controllers/userController.js';
-import { createRoomSlot, getRoomSlotById } from '../controllers/roomSlotController.js';
-import { createRoom, getRoomById } from '../controllers/roomController.js';
-import { createLocation, getLocationById } from '../controllers/loactioncontroller.js';
+import { createRoomSlot, getRoomSlotById, getSlotByRoomId } from '../controllers/roomSlotController.js';
+import { createRoom, getRoomByCompanyId} from '../controllers/roomController.js';
+import { createLocation, getLocationByCompanyId, getLocationById } from '../controllers/loactioncontroller.js';
 import { createDevices, getDeviceById, listDevices } from '../controllers/devicesController.js';
 import { createCompany, listCompany } from '../controllers/companyController.js';
-import { createBooking } from '../controllers/bookingController.js';
+import { createBooking, getBookingsByCompanyId } from '../controllers/bookingController.js';
 import { createAmenity, listAmenity } from '../controllers/amenitesController.js';
 import {companyLogin, deviceLogin, userLogin} from '../controllers/loginController.js';
 import authUserMiddleWare from '../middleware/authenticationUserController.js';
@@ -20,12 +20,15 @@ router.post('/UpdateUserById',authUserMiddleWare,updateUserById)
 
 router.post('/createRoomSlot',authUserMiddleWare,createRoomSlot)
 router.post('/getRoomSlotById',authUserMiddleWare,getRoomSlotById)
+router.post('/getSlotByRoomId',authUserMiddleWare,getSlotByRoomId)
 
-router.post('/createRoom',authUserMiddleWare,createRoom)
-router.post('/getRoomById',authUserMiddleWare,getRoomById)
+router.post('/createRoom',authCompanyMiddleWare,createRoom)
+
+router.post('/getRoomByCompanyId',authCompanyMiddleWare,getRoomByCompanyId)
 
 router.post('/createLocation',createLocation)
-router.post('/getLocationById',authUserMiddleWare,getLocationById)
+router.post('/getLocationById',authCompanyMiddleWare,getLocationById)
+router.post('/getLocationByCompanyId',authCompanyMiddleWare,getLocationByCompanyId)
 
 router.post('/createDevices',createDevices)
 router.post('/getDeviceById',authUserMiddleWare,getDeviceById)
@@ -34,8 +37,8 @@ router.get('/listDevices',authDevicesMiddleWare,listDevices)
 router.post('/createCompany',createCompany)
 router.get('/listCompany',authCompanyMiddleWare,listCompany)
 
-router.post('/createBooking',createBooking)
-
+router.post('/createBooking',authUserMiddleWare,createBooking)
+router.post('/getBookingsByCompanyId',authCompanyMiddleWare,getBookingsByCompanyId)
 router.post('/createAmenity',createAmenity)
 router.get('/listAmenity',authUserMiddleWare,listAmenity)
 router.post('/loginUser',userLogin)

@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const comapnySchema=new mongoose.Schema({
     name:String,
     companyName:String,
-    email:String,
+    email:{ type: String, unique: true },
     password:String,
     location:[]
 })

@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const devicesSchema=new mongoose.Schema({
     name:String,
-    email:String,
+    email:{ type: String, unique: true },
     password:String,
     location:{
         type: mongoose.Schema.Types.ObjectId,

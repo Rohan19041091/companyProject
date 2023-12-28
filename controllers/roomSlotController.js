@@ -33,4 +33,21 @@ const getRoomSlotById=async(req,res)=>{
     }
 
 }
-export {createRoomSlot,getRoomSlotById}
+const getSlotByRoomId = async (req, res) => {
+    const { roomId } = req.body;
+
+    try {
+        const roomSlots = await RoomSlot.find({ roomId });
+
+        if (!roomSlots || roomSlots.length === 0) {
+            return res.status(404).json({ message: 'No room slots found for the given room ID' });
+        }
+
+        res.json(roomSlots);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error getting room slots by room ID' });
+    }
+};
+
+export {createRoomSlot,getRoomSlotById,getSlotByRoomId}

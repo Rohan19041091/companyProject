@@ -5,6 +5,10 @@ const bookingSchema=new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "RoomSlot"
     },
+    roomId:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Room"
+    },
     companyId:{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Company"
