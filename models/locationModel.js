@@ -7,5 +7,5 @@ import mongoose from "mongoose";
   },
  })
 
-const Location=new mongoose.model("Location",locationSchema)
-export default Location
+const location=new mongoose.model("location",locationSchema)
+export default location

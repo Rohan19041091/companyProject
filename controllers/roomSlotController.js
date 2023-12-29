@@ -1,53 +1,49 @@
-import RoomSlot from "../models/roomSlotModel.js";
-
+import roomSlot from "../models/roomSlotModel.js";
+import { sendResponse, sendErrorResponse } from "../utils/helper.js";
 
 const createRoomSlot=async(req,res)=>{
     const {roomId,startTime,endTime}=req.body
-    const newRoomSlot= await new RoomSlot({roomId,startTime,endTime})
+    const newRoomSlot= await new roomSlot({roomId,startTime,endTime})
     try {
        await  newRoomSlot.save();
-       res.json({
-        success: true,
-        message: "Room Slot created",
-        data: newRoomSlot // Include the data in the response
-    });
+       sendResponse(res, "Slot is created", newRoomSlot);
      } catch (error) {
-         res.status(500).json({message:"RoomSlot is not created"})
+        console.log(error)
+        sendErrorResponse(res, 500, 'Error creating user');
      }
 }
-const getRoomSlotById=async(req,res)=>{
-    const { roomSlotId } = req.body
+const getRoomSlotById = async (req, res) => {
+    const { roomSlotId } = req.body;
 
     try {
-        const roomSlot = await RoomSlot.findById(roomSlotId);
+        const roomSlot = await roomSlot.findById(roomSlotId);
 
-        
         if (!roomSlot) {
-            return res.status(404).json({ message: 'roomSlot is not found' });
+            return sendErrorResponse(res, 404, 'roomSlot is not found');
         }
 
-        res.json(roomSlot);
+        sendSuccessResponse(res, 'roomSlot', roomSlot);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Error getting divice' });
+        sendErrorResponse(res, 500, 'Error getting device');
     }
-
-}
+};
 const getSlotByRoomId = async (req, res) => {
     const { roomId } = req.body;
 
     try {
-        const roomSlots = await RoomSlot.find({ roomId });
+        const roomSlots = await roomSlot.find({ roomId });
 
         if (!roomSlots || roomSlots.length === 0) {
-            return res.status(404).json({ message: 'No room slots found for the given room ID' });
+            return sendErrorResponse(res, 404, 'No room slots found for the given room ID');
         }
 
-        res.json(roomSlots);
+        sendSuccessResponse(res, 'roomSlot', roomSlots);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Error getting room slots by room ID' });
+        sendErrorResponse(res, 500, 'Error getting room slots by room ID');
     }
 };
+
 
 export {createRoomSlot,getRoomSlotById,getSlotByRoomId}

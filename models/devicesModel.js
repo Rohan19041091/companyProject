@@ -22,5 +22,5 @@ const devicesSchema=new mongoose.Schema({
     }
 })
 
-const Devices =new mongoose.model("Devices",devicesSchema)
-export default Devices
+const devices =new mongoose.model("devices",devicesSchema)
+export default devices

@@ -1,22 +1,26 @@
-import Amenity from "../models/amenitesModel.js";
+import amenity from "../models/amenitesModel.js";
+import { sendResponse, sendErrorResponse } from "../utils/helper.js";
 
-const createAmenity=async(req,res)=>{
-    const {name}=req.body
-    const newAmenity= new Amenity({name})
+const createAmenity = async (req, res) => {
+    const { name } = req.body;
+    const newAmenity = new amenity({ name });
+
     try {
-       await  newAmenity.save();
-       res.json({
-        success: true,
-        message: "Amenity created",
-        data: newAmenity // Include the data in the response
-    });
-     } catch (error) {
-         res.status(500).json({message:"Amenity is not created"})
-     }
-}
+        await newAmenity.save();
+        sendResponse(res, 200, 'Amenity created', newAmenity);
+    } catch (error) {
+        console.error(error);
+        sendErrorResponse(res, 500, 'Amenity not created');
+    }
+};
 
-const listAmenity=async(req,res)=>{
-    const list=await Amenity.find()
-    res.json(list)
+const listAmenity = async (req, res) => {
+    try {
+        const list = await amenity.find();
+        sendResponse(res, 200, 'List of amenities', list);
+    } catch (error) {
+        console.error(error);
+        sendErrorResponse(res, 500, 'Error listing amenities');
+    }
 }
 export{createAmenity,listAmenity}

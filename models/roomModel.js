@@ -19,5 +19,5 @@ const roomSchema=new mongoose.Schema({
     capacity:String
 })
 
-const Room=new mongoose.model("Room",roomSchema)
-export default Room
+const room=new mongoose.model("room",roomSchema)
+export default room

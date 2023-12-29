@@ -5,8 +5,12 @@ const comapnySchema=new mongoose.Schema({
     companyName:String,
     email:{ type: String, unique: true },
     password:String,
-    location:[]
+    location:[],
+    isDisable:{
+        type:Boolean,
+        default:true
+    },
 })
 
-const Company=new mongoose.model("Company",comapnySchema)
-export {Company,}
+const company=new mongoose.model("company",comapnySchema)
+export {company,}

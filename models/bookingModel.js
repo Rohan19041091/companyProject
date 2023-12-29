@@ -3,22 +3,22 @@ import mongoose from "mongoose";
 const bookingSchema=new mongoose.Schema({
     slotId:{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "RoomSlot"
+        ref: "roomSlot"
     },
     roomId:{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Room"
+        ref: "room"
     },
     companyId:{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Company"
+        ref: "company"
     },
     userId:{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
+        ref: "user"
     }
 
 })
 
-const Booking = new mongoose.model("Booking",bookingSchema)
-export default Booking
+const booking = new mongoose.model("booking",bookingSchema)
+export default booking

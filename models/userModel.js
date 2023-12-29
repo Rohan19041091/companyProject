@@ -6,14 +6,11 @@ const userSchema= new mongoose.Schema({
     password:String,
     companyId:{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Company"
+        ref: "company"
     },
-    isDisable:{
-        type:Boolean,
-        default:false
-    },
+    role:String  
 })
 
-const User=new mongoose.model("User",userSchema)
+const user=new mongoose.model("user",userSchema)
 
-export default User
+export default user

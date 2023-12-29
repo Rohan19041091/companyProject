@@ -1,10 +1,10 @@
 import  jwt  from "jsonwebtoken";
 import { secretKey } from "../utils/constant.js";
-import User from "../models/userModel.js";
+import user from "../models/userModel.js";
 const userData={
-    user_id: User.id,
-    username: User.name,
-    email: User.email
+    user_id: user.id,
+    username: user.name,
+    email: user.email
 }
 // const jwtToken= jwt.sign(userData,secretKey,{ expiresIn: '1h' })
 const authUserMiddleWare=(req,res,next)=>{

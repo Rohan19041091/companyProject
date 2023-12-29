@@ -15,5 +15,5 @@ const roomSlotSchema= new mongoose.Schema({
       },
 });
 
-const RoomSlot=new mongoose.model("RoomSlot",roomSlotSchema)
-export default RoomSlot
+const roomSlot=new mongoose.model("roomSlot",roomSlotSchema)
+export default roomSlot

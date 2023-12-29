@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
-import Location from "../models/locationModel.js";
+import location from "../models/locationModel.js";
 const createLocation=async(req,res)=>{
    const {name}=req.body
    const companyId = req.user.companyId;
-   const newLocation= await new Location({name,companyId})
+   const newLocation= await new location({name,companyId})
    try {
      await newLocation.save()
      res.json({
@@ -19,14 +19,18 @@ const createLocation=async(req,res)=>{
 const getLocationById=async(req,res)=>{
     const {locationId}=req.body
     try {
-        const location = await Location.findById(locationId);
+        const location = await location.findById(locationId);
 
         
         if (!location) {
             return res.status(404).json({ message: 'location not found' });
         }
 
-        res.json(location);
+        res.json({
+            success: true,
+            message: "location",
+            data: location // Include the data in the response
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Error getting loaction' });
@@ -38,7 +42,7 @@ const getLocationByCompanyId = async (req, res) => {
     const companyId = req.user.companyId;
 
     try {
-        const locations = await Location.find({ companyId});
+        const locations = await location.find({ companyId});
 
         if (!locations || locations.length === 0) {
             return res.status(404).json({ message: 'No locations found for the given company and location ID' });

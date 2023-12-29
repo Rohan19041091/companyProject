@@ -1,38 +1,19 @@
 import mongoose from "mongoose";
-import Room from "../models/roomModel.js";
+import room from "../models/roomModel.js";
+import { sendResponse, sendErrorResponse } from "../utils/helper.js";
 
-const createRoom=async(req,res)=>{
- const{name,description,amenites,locationId,capacity}=req.body
- const companyId = req.user.companyId;
- const newRoom = await new Room({name,description,amenites,companyId,locationId,capacity})
- try {
-    await newRoom.save()
-    res.json({
-        success: true,
-        message: "Room created",
-        data: newRoom 
-    });
- } catch (error) {
-    console.log(error)
-    res.status(500).json({message:"Room not created"})
- }
-}
-
-
-const getRoomById = async (req, res) => {
+const createRoom = async (req, res) => {
+    const { name, description, amenities, locationId, capacity } = req.body;
     const companyId = req.user.companyId;
 
+    const newRoom = await new room({ name, description, amenities, companyId, locationId, capacity });
+
     try {
-        const rooms = await Room.find({ companyId });
-
-        if (!rooms || rooms.length === 0) {
-            return res.status(404).json({ message: 'No rooms found for the given company ID' });
-        }
-
-        res.json(rooms);
+        await newRoom.save();
+        sendResponse(res, 'Room created', newRoom);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error getting rooms by company ID' });
+        console.log(error);
+        sendErrorResponse(res, 500, 'Room not created');
     }
 };
 
@@ -40,28 +21,35 @@ const getRoomByCompanyId = async (req, res) => {
     const companyId = req.user.companyId;
 
     try {
-        const rooms = await Room.aggregate([
-            {
-                $match: {
-                    companyId: companyId
-                }
-            },
-            {
-                $lookup: {
-                    from: 'amenity',
-                    localField: 'amenities',
-                    foreignField: '_id',
-                    as: 'amenities'
-                }
-            }
-        ]);
-    res.json(rooms)
-    console.log("Aggregation Result:", rooms);
+        const rooms = await room.find({ companyId });
+
+        if (!rooms || rooms.length === 0) {
+            return sendErrorResponse(res, 404, 'No rooms found for the given company ID');
+        }
+
+        sendResponse(res, 'room', rooms);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Error getting rooms by company ID' });
+        sendErrorResponse(res, 500, 'Error getting rooms by company ID');
     }
-    
-}
+};
 
-export {createRoom,getRoomById,getRoomByCompanyId}
+const getRoomByLocationId=async (req, res) => {
+    const locationId = req.params.locationId;
+
+    try {
+        
+        const roomsList = await room.find({ locationId });
+
+        if (!roomsList || roomsList.length === 0) {
+            return sendErrorResponse(res, 404, 'No rooms found for the given location ID');
+        }
+
+        sendResponse(res, 200, 'Rooms retrieved successfully', roomsList);
+    } catch (error) {
+        console.error(error);
+        sendErrorResponse(res, 500, 'Error getting rooms by location ID');
+    }
+};
+
+export {createRoom,getRoomByCompanyId,getRoomByLocationId}

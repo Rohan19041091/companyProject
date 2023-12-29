@@ -1,11 +1,7 @@
 import  jwt  from "jsonwebtoken";
 import { secretKey } from "../utils/constant.js";
-import Devices from "../models/devicesModel.js";
-const userData={
-    user_id: Devices.id,
-    username: Devices.name,
-    email: Devices.email
-}
+import devices from "../models/devicesModel.js";
+
 // const jwtToken= jwt.sign(userData,secretKey,{ expiresIn: '1h' })
 const authDevicesMiddleWare=(req,res,next)=>{
     const token=req.header('Authorization')

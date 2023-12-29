@@ -1,27 +1,60 @@
 import mongoose from "mongoose";
-import { Company } from "../models/companyModel.js";
+import { company } from "../models/companyModel.js";
 import bcrypt from 'bcrypt'
-const createCompany=async(req,res)=>{
-    const {name,companyName,email,password,location}=req.body;
-    const hashedPassword = await bcrypt.hash(password,10)
-    const newCompany=await new Company({name,companyName,email,password:hashedPassword,location})
-    try {
-        await  newCompany.save();
-        res.json({success: true,message: "Company created", data: newCompany });
-      } catch (error) {
-          res.status(500).json({message:"company not created"})
-      }
-    }
+import { sendResponse, sendErrorResponse } from "../utils/helper.js";
 
-const listCompany=async(req,res)=>{
+const createCompany = async (req, res) => {
+    const { name, companyName, email, password, location } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newCompany = await new company({ name, companyName, email, password: hashedPassword, location });
+
     try {
-        const list=await Company.find();
-     res.json(list) 
+        await newCompany.save();
+        sendResponse(res, 200, 'Company created', newCompany);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Error listing companies' });
-    
+        sendErrorResponse(res, 500, 'Company not created');
     }
-    
-}
-export{createCompany,listCompany}
+};
+
+const listCompany = async (req, res) => {
+    try {
+        const list = await company.find();
+        sendResponse(res, 200, 'List of companies', list);
+    } catch (error) {
+        console.error(error);
+        sendErrorResponse(res, 500, 'Error listing companies');
+    }
+};
+
+const getCompanyRequest = async (req, res) => {
+    try {
+        const list = await company.find({ isDisable: { $ne: true } });
+        sendResponse(res, 200, 'List of active companies', list);
+    } catch (error) {
+        console.error(error);
+        sendErrorResponse(res, 500, 'Error getting active companies');
+    }
+};
+
+const acceptCompnyRequest=async (req, res) => {
+    const companyId = req.query;
+
+    try {
+        const existingCompany = await company.findById(companyId);
+
+        if (!existingCompany) {
+            return sendErrorResponse(res, 404, 'Company not found');
+        }
+
+        existingCompany.isDisable = false;
+
+        await existingCompany.save();
+
+        sendResponse(res, 200, 'Company request accepted successfully', existingCompany);
+    } catch (error) {
+        console.error(error);
+        sendErrorResponse(res, 500, 'Error accepting company request');
+    }
+};
+export{createCompany,listCompany,getCompanyRequest,acceptCompnyRequest}

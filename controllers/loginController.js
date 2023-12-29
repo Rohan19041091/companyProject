@@ -2,22 +2,24 @@ import User from "../models/userModel.js";
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { secretKey } from "../utils/constant.js";
-import Devices from "../models/devicesModel.js";
-import { Company } from "../models/companyModel.js";
+import devices from "../models/devicesModel.js";
+import { company } from "../models/companyModel.js";
+import { sendResponse, sendErrorResponse } from "../utils/helper.js";
+
 const userLogin=async(req,res)=>{
     const{email,password}=req.body;
     const user = await User.findOne({email});
     if(!user){
-       return res.status(400).json({message:"user not found"})
+      sendErrorResponse(res, 400, 'user not found');
     }
     
     const userPasswordMatch =  bcrypt.compare(password,user.password)
     if(userPasswordMatch){
-       const UserToken = jwt.sign({email:user.email,role: 'user',userId:user._id,companyId: user.companyId},secretKey, { expiresIn: '1h' })
-       res.json({UserToken})
+       const UserToken = jwt.sign({email:user.email,roles: 'user',role:user.role,userId:user._id,companyId: user.companyId},secretKey, { expiresIn: '1h' })
+       sendResponse(res, "User token ", {UserToken});
     }
     else{
-       res.status(400).json({message:"incorrect password"})
+      sendErrorResponse(res, 400, 'incorrect password');
     }
   
   }
@@ -25,36 +27,37 @@ const userLogin=async(req,res)=>{
 
 const deviceLogin=async(req,res)=>{
     const{email,password}=req.body;
-    const device = await Devices.findOne({email});
+    const device = await devices.findOne({email});
     if(!device){
-       return res.status(400).json({message:"user not found"})
+      sendErrorResponse(res, 400, 'user not found');
     }
     const devicePasswordMatch = bcrypt.compare(password,device.password)
     if(devicePasswordMatch){
-       const jwtToken = jwt.sign({email:Devices.email,role: 'device'},secretKey, { expiresIn: '1h' })
-       res.json({jwtToken})
+       const jwtToken = jwt.sign({email:devices.email,role: 'device',companyId:device.companyId},secretKey, { expiresIn: '1h' })
+       sendResponse(res, "device token ", {jwtToken});
     }
     else{
-       res.status(400).json({message:"incorrect password"})
+      sendErrorResponse(res, 400, 'incorrect password');
     }
   
   }
 
   const companyLogin=async(req,res)=>{
     const{email,password}=req.body;
-    const company = await Company.findOne({email});
-    if(!company){
-       return res.status(400).json({message:"user not found"})
+    const companys = await company.findOne({email});
+    if(!companys){
+      sendErrorResponse(res, 400, 'user not found');
     }
-    const companyPasswordMatch = await bcrypt.compare(password,company.password)
+    const companyPasswordMatch = await bcrypt.compare(password,companys.password)
     if(companyPasswordMatch){
-       const companyToken = jwt.sign({email:company.email,role: 'company',companyId: company._id},secretKey, { expiresIn: '1h' })
-       res.json({companyToken})
+       const companyToken = jwt.sign({email:companys.email,role: 'company',companyId: companys._id},secretKey, { expiresIn: '1h' })
+       sendResponse(res, "Company token ", {companyToken});
+
       
 
     }
     else{
-       res.status(400).json({message:"incorrect password"})
+      sendErrorResponse(res, 400, 'incorrect password');
     }
   
   }

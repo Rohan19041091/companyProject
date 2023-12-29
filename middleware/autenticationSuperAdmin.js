@@ -1,13 +1,14 @@
 import  jwt  from "jsonwebtoken";
 import { secretKey } from "../utils/constant.js";
-import { company } from "../models/companyModel.js";
+import user from "../models/userModel.js";
+import {sendResponse,sendErrorResponse} from "../utils/helper.js";
 const userData={
-    user_id: company.id,
-    username: company.name,
-    email: company.email
+    user_id: user.id,
+    username: user.name,
+    email: user.email
 }
 // const jwtToken= jwt.sign(userData,secretKey,{ expiresIn: '1h' })
-const authCompanyMiddleWare = (req, res, next) => {
+const authSuperAdminMiddleWare = (req, res, next) => {
     const token = req.header('Authorization');
 
     if (!token) {
@@ -17,10 +18,10 @@ const authCompanyMiddleWare = (req, res, next) => {
     try {
         const decoded = jwt.verify(token.replace('Bearer ', ''), secretKey);
 
-        if (decoded.role !== 'company') {
-            return sendErrorResponse(res, 403, 'Forbidden - Company access required');
+        if (decoded.role !== 'superAdmin') {
+            return sendErrorResponse(res, 403, 'Forbidden - User access required');
         }
-
+         
         req.user = decoded;
         next();
     } catch (error) {
@@ -30,4 +31,5 @@ const authCompanyMiddleWare = (req, res, next) => {
 };
 
 
-export default authCompanyMiddleWare
+
+export default authSuperAdminMiddleWare
